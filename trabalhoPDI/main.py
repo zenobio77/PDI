@@ -39,7 +39,7 @@ for name in os.listdir(KNOWN_FACES_DIR):
         known_faces.append(encoding)
         known_names.append(name)
 
-
+attendance_list = []
 print('Processing unknown faces...')
 # Now let's loop over a folder of faces we want to label
 for filename in os.listdir(UNKNOWN_FACES_DIR):
@@ -73,7 +73,8 @@ for filename in os.listdir(UNKNOWN_FACES_DIR):
         if True in results:  # If at least one is true, get a name of first of found labels
             match = known_names[results.index(True)]
             print(f' - {match} from {results}')
-
+            if match not in attendance_list:
+                attendance_list.append(match)
             # Each location contains positions in order: top, right, bottom, left
             top_left = (face_location[3], face_location[0])
             bottom_right = (face_location[1], face_location[2])
@@ -96,6 +97,12 @@ for filename in os.listdir(UNKNOWN_FACES_DIR):
             cv2.putText(image, match, (face_location[3] + 10, face_location[2] + 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), FONT_THICKNESS)
 
     # Show image
-    cv2.imshow(filename, image)
-    cv2.waitKey(0)
-    cv2.destroyWindow(filename)
+    #cv2.imshow(filename, image)
+    #cv2.waitKey(0)
+    #cv2.destroyWindow(filename)
+
+file = open("attendance_list.txt", "w", encoding="utf-8")
+for name in attendance_list:
+    file.write(name + "\n")
+file.close()
+
